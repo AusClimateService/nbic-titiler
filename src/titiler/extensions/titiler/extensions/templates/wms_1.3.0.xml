@@ -4,125 +4,126 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 >
 
-<Service>
-  <Name>NBIC WMS powered by TiTiler</Name>
-  <Title>NBIC WMS powered by TiTiler</Title>
-  <Abstract>COG URLs specified in the "LAYERS" parameter will show up as available layers</Abstract>
-  <!-- <OnlineResource xlink:type="simple" xlink:href="https://research.csiro.au/nbic/"/> -->
-  <ContactInformation>
-    <ContactPersonPrimary>
-      <ContactPerson>National Bushfire Intelligence Capability</ContactPerson>
-      <ContactOrganization>CSIRO</ContactOrganization>
-    </ContactPersonPrimary>
-  </ContactInformation>
-  <Fees>none</Fees>
-  <AccessConstraints>none</AccessConstraints>
-</Service>
-
-<Capability>
-  <Request>
-    <GetFeatureInfo>
-      <Format>text/html</Format>
-      <DCPType>
-        <HTTP>
-          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape}}"/></Get>
-          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
-        </HTTP>
-      </DCPType>
-    </GetFeatureInfo>
-    <GetCapabilities>
-      <Format>text/xml</Format>
-      <DCPType>
-        <HTTP>
-          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape}}"/></Get>
-          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
-        </HTTP>
-      </DCPType>
-    </GetCapabilities>
-    <GetMap>
-      {% for format in formats %}
-      <Format>{{format}}</Format>
-      {% endfor %}
-      <DCPType>
-        <HTTP>
-          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Get>
-          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
-        </HTTP>
-      </DCPType>
-    </GetMap>
-    <!--<GetLegendGraphic>
-      <Format>image/png</Format>
-      <DCPType>
-        <HTTP>
-          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Get>
-          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
-        </HTTP>
-      </DCPType>
-    </GetLegendGraphic> -->
-  </Request>
-  <Exception>
-    <Format>XML</Format>
-    <Format>INIMAGE</Format>
-    <Format>BLANK</Format>
-  </Exception>
-
-  <Layer>
-    <Name>TiTiler WMS</Name>
-    <Title>TiTiler WMS</Title>
+  <Service>
+    <Name>NBIC WMS powered by TiTiler</Name>
+    <Title>NBIC WMS powered by TiTiler</Title>
     <Abstract>COG URLs specified in the "LAYERS" parameter will show up as available layers</Abstract>
-    
-    {% for crs in available_epsgs.keys() %}
-    <CRS>{{crs}}</CRS>
-    {% endfor %}
-    
-    <EX_GeographicBoundingBox>
-        <westBoundLongitude>{{service_dict['xmin']}}</westBoundLongitude>
-        <eastBoundLongitude>{{service_dict['xmax']}}</eastBoundLongitude>
-        <southBoundLatitude>{{service_dict['ymin']}}</southBoundLatitude>
-        <northBoundLatitude>{{service_dict['ymax']}}</northBoundLatitude>
-    </EX_GeographicBoundingBox>
-    
-    {% for crs in available_epsgs.keys() %}
-    <BoundingBox CRS="{{crs}}" minx="{{available_epsgs[crs][0]}}" miny="{{available_epsgs[crs][1]}}" maxx="{{available_epsgs[crs][2]}}" maxy="{{available_epsgs[crs][3]}}" />
-    {% endfor %}
-    <Style>
-      <LegendURL width="300" height="500">
-        <Format>image/png</Format>
-        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
-         xlink:type="http://www.w3.org/1999/xlink"
-         xlink:href="{{ legend_url|escape }}" />
-      </LegendURL>
-    </Style>
-    {% for layer in layers_dict.keys() %}
-    <Layer queryable="1" opaque="0" cascaded="0">
-        <Name>{{layer}}</Name>
-        <Title>{{layers_dict[layer]['title']}}</Title>
-        <Abstract>{{layers_dict[layer]['abstract']}}</Abstract>
-        {% for crs in available_epsgs.keys() %}
-        <CRS>{{crs}}</CRS>
-        {% endfor %}
-        <EX_GeographicBoundingBox>
-            <westBoundLongitude>{{layers_dict[layer]['bounds_wgs84'][0]}}</westBoundLongitude>
-            <eastBoundLongitude>{{layers_dict[layer]['bounds_wgs84'][2]}}</eastBoundLongitude>
-            <southBoundLatitude>{{layers_dict[layer]['bounds_wgs84'][1]}}</southBoundLatitude>
-            <northBoundLatitude>{{layers_dict[layer]['bounds_wgs84'][3]}}</northBoundLatitude>
-        </EX_GeographicBoundingBox>
+    <!-- <OnlineResource xlink:type="simple" xlink:href="https://research.csiro.au/nbic/"/> -->
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson>National Bushfire Intelligence Capability</ContactPerson>
+        <ContactOrganization>CSIRO</ContactOrganization>
+      </ContactPersonPrimary>
+    </ContactInformation>
+    <Fees>none</Fees>
+    <AccessConstraints>none</AccessConstraints>
+  </Service>
 
-        {% for crs in available_epsgs.keys() %}
-        <BoundingBox CRS="{{crs}}" minx="{{available_epsgs[crs][0]}}" miny="{{available_epsgs[crs][1]}}" maxx="{{available_epsgs[crs][2]}}" maxy="{{available_epsgs[crs][3]}}" />
+  <Capability>
+    <Request>
+      <GetFeatureInfo>
+        <Format>text/html</Format>
+        <DCPType>
+          <HTTP>
+            <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape}}"/></Get>
+            <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
+          </HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <GetCapabilities>
+        <Format>text/xml</Format>
+        <DCPType>
+          <HTTP>
+            <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape}}"/></Get>
+            <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
+          </HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        {% for format in formats %}
+        <Format>{{format}}</Format>
         {% endfor %}
-        <Style>
-          <Name>default</Name>
-          <Title>default</Title>
-          <LegendURL width="300" height="500">
-            <Format>image/png</Format>
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
-            xlink:type="http://www.w3.org/1999/xlink"
-            xlink:href="{{ legend_url|escape + '&amp;LAYERS=' + layer }}" />
-            </LegendURL>
-        </Style>
+        <DCPType>
+          <HTTP>
+            <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Get>
+            <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
+          </HTTP>
+        </DCPType>
+      </GetMap>
+      <!--<GetLegendGraphic>
+        <Format>image/png</Format>
+        <DCPType>
+          <HTTP>
+            <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Get>
+            <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ request_url|escape }}"/></Post>
+          </HTTP>
+        </DCPType>
+      </GetLegendGraphic> -->
+    </Request>
+    <Exception>
+      <Format>XML</Format>
+      <Format>INIMAGE</Format>
+      <Format>BLANK</Format>
+    </Exception>
+
+    <Layer>
+      <Name>TiTiler WMS</Name>
+      <Title>TiTiler WMS</Title>
+      <Abstract>COG URLs specified in the "LAYERS" parameter will show up as available layers</Abstract>
+      
+      {% for crs in available_epsgs.keys() %}
+      <CRS>{{crs}}</CRS>
+      {% endfor %}
+      
+      <EX_GeographicBoundingBox>
+          <westBoundLongitude>{{service_dict['xmin']}}</westBoundLongitude>
+          <eastBoundLongitude>{{service_dict['xmax']}}</eastBoundLongitude>
+          <southBoundLatitude>{{service_dict['ymin']}}</southBoundLatitude>
+          <northBoundLatitude>{{service_dict['ymax']}}</northBoundLatitude>
+      </EX_GeographicBoundingBox>
+      
+      {% for crs in available_epsgs.keys() %}
+      <BoundingBox CRS="{{crs}}" minx="{{available_epsgs[crs][0]}}" miny="{{available_epsgs[crs][1]}}" maxx="{{available_epsgs[crs][2]}}" maxy="{{available_epsgs[crs][3]}}" />
+      {% endfor %}
+      <Style>
+        <LegendURL width="300" height="500">
+          <Format>image/png</Format>
+          <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+          xlink:type="http://www.w3.org/1999/xlink"
+          xlink:href="{{ legend_url|escape }}" />
+        </LegendURL>
+      </Style>
+      {% for layer in layers_dict.keys() %}
+      <Layer queryable="1" opaque="0" cascaded="0">
+          <Name>{{layer}}</Name>
+          <Title>{{layers_dict[layer]['title']}}</Title>
+          <Abstract>{{layers_dict[layer]['abstract']}}</Abstract>
+          {% for crs in available_epsgs.keys() %}
+          <CRS>{{crs}}</CRS>
+          {% endfor %}
+          <EX_GeographicBoundingBox>
+              <westBoundLongitude>{{layers_dict[layer]['bounds_wgs84'][0]}}</westBoundLongitude>
+              <eastBoundLongitude>{{layers_dict[layer]['bounds_wgs84'][2]}}</eastBoundLongitude>
+              <southBoundLatitude>{{layers_dict[layer]['bounds_wgs84'][1]}}</southBoundLatitude>
+              <northBoundLatitude>{{layers_dict[layer]['bounds_wgs84'][3]}}</northBoundLatitude>
+          </EX_GeographicBoundingBox>
+
+          {% for crs in available_epsgs.keys() %}
+          <BoundingBox CRS="{{crs}}" minx="{{available_epsgs[crs][0]}}" miny="{{available_epsgs[crs][1]}}" maxx="{{available_epsgs[crs][2]}}" maxy="{{available_epsgs[crs][3]}}" />
+          {% endfor %}
+          <Style>
+            <Name>default</Name>
+            <Title>default</Title>
+            <LegendURL width="300" height="500">
+              <Format>image/png</Format>
+              <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:type="http://www.w3.org/1999/xlink"
+              xlink:href="{{ legend_url|escape + '&amp;LAYERS=' + layer }}" />
+              </LegendURL>
+          </Style>
+      </Layer>
+      {% endfor %}
+      
     </Layer>
-    {% endfor %}
-    
-  </Layer>
-</Capability>
+  </Capability>
+</WMS_Capabilities>
